@@ -1,26 +1,26 @@
 #include "Priority_queue.h"
 
-template <typename T>
-PriorityQueue<T>::PriorityQueue(bool(*comparator)(const T*, const T*)) :comparator(comparator) {};
+template <typename X>
+PriorityQueue<X>::PriorityQueue(bool(*comparator)(X*, X*)) :comparator(comparator) {};
 
-template <typename T>
-PriorityQueue<T>::PriorityQueue() 
+template <typename X>
+PriorityQueue<X>::PriorityQueue() 
 {
-	comparator = [](const T* a, const  T* b) { return (*a) < (*b); };
+	comparator = [](X* a, X* b) { return (*a) < (*b); };
 }
 
-template <typename T>
-const T* PriorityQueue<T>::swap(size_t a, size_t b)
+template <typename X>
+X* PriorityQueue<X>::swap(size_t a, size_t b)
 {
-	const T* temp = binary_min_heap[a];
+	X* temp = binary_min_heap[a];
 	binary_min_heap[a] = binary_min_heap[b];
 	binary_min_heap[b] = temp;
 	return (temp);
 
 }
 
-template <typename T>
-void PriorityQueue<T>::heapify_up(size_t index)
+template <typename X>
+void PriorityQueue<X>::heapify_up(size_t index)
 {
 	if (index == 0) return;
 	size_t parent;
@@ -32,15 +32,20 @@ void PriorityQueue<T>::heapify_up(size_t index)
 
 }
 
-template <typename T>
-size_t PriorityQueue<T>::min(size_t l, size_t r)
+template <typename X>
+size_t PriorityQueue<X>::min(size_t l, size_t r)
 {
 	if (comparator(binary_min_heap[r], binary_min_heap[l])) return r;
 	return l;
 }
 
-template <typename T>
-void PriorityQueue<T>::heapify_down(size_t index)
+template<typename X>
+size_t PriorityQueue<X>::size() const {
+	return binary_min_heap.size();
+}
+
+template <typename X>
+void PriorityQueue<X>::heapify_down(size_t index)
 {
 	size_t l = 2 * index + 1;
 	size_t r = 2 * index + 2;
@@ -62,14 +67,14 @@ void PriorityQueue<T>::heapify_down(size_t index)
 	heapify_down(next);
 }
 
-template <typename T>
-T PriorityQueue<T>::top() const
+template <typename X>
+X PriorityQueue<X>::top() const
 {
 	return *binary_min_heap[0];
 }
 
-template <typename T>
-void PriorityQueue<T>::push(const T* item)
+template <typename X>
+void PriorityQueue<X>::push(X* item)
 {
 	binary_min_heap.push_back(item);
 	heapify_up(binary_min_heap.size() - 1);
@@ -77,10 +82,10 @@ void PriorityQueue<T>::push(const T* item)
 }
 
 //
-template <typename T>
-const T* PriorityQueue<T>::pop()
+template <typename X>
+X* PriorityQueue<X>::pop()
 {
-	const T* root = swap(0, binary_min_heap.size() - 1);
+	X* root = swap(0, binary_min_heap.size() - 1);
 	binary_min_heap.resize(binary_min_heap.size() - 1);
 	heapify_down(0);
 	return root;// 
